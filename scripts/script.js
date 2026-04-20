@@ -1,8 +1,8 @@
-const API_URL = "https://ai-quiz-students-backend.onrender.com/quiz";
-
+//const API_URL = "https://ai-quiz-students-backend.onrender.com/quiz";
+const API_URL = "http://localhost:3000/quiz";
 let currentQuiz = null;
 
-// 🔹 renderiza o quiz dinamicamente
+
 function renderQuiz(quiz) {
   currentQuiz = quiz;
 
@@ -17,7 +17,7 @@ function renderQuiz(quiz) {
     title.textContent = `${index + 1}. ${q.question}`;
     wrapper.appendChild(title);
 
-    // múltipla escolha
+
     if (q.type === "multiple_choice") {
       const select = document.createElement("select");
       select.id = `q_${index}`;
@@ -37,7 +37,7 @@ function renderQuiz(quiz) {
       wrapper.appendChild(select);
     }
 
-    // aberta
+
     if (q.type === "open") {
       const input = document.createElement("input");
       input.type = "text";
@@ -52,7 +52,7 @@ function renderQuiz(quiz) {
   });
 }
 
-// 🔹 coleta respostas
+
 function getAnswers() {
   const answers = {};
 
@@ -64,7 +64,7 @@ function getAnswers() {
   return answers;
 }
 
-// 🔹 envia respostas para o backend
+
 async function submitAnswers() {
   const answers = getAnswers();
 
@@ -124,12 +124,12 @@ function renderAnalysis(data) {
   container.innerHTML = "";
 
   Object.entries(data).forEach(([key, value]) => {
-    // título
+
     const title = document.createElement("h2");
     title.textContent = formatTitle(key);
     container.appendChild(title);
 
-    // conteúdo
+
     if (Array.isArray(value)) {
       const ul = document.createElement("ul");
 
@@ -148,7 +148,7 @@ function renderAnalysis(data) {
   });
 }
 
-// deixa bonito tipo "dificuldades" → "Dificuldades"
+
 function formatTitle(text) {
   return text.charAt(0).toUpperCase() + text.slice(1);
 }
