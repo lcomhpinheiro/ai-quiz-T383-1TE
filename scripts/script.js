@@ -1,5 +1,4 @@
-//const API_URL = "https://ai-quiz-students-backend.onrender.com/quiz";
-const API_URL = "http://localhost:3000/quiz";
+const API_URL = "https://ai-quiz-students-backend.onrender.com/quiz";
 let currentQuiz = null;
 
 
