@@ -124,12 +124,20 @@ function renderAnalysis(data) {
   container.innerHTML = "";
 
   Object.entries(data).forEach(([key, value]) => {
+<<<<<<< HEAD
 
+=======
+    // título
+>>>>>>> 21c8dbeb309216aae56f91f215a45f29c5635dba
     const title = document.createElement("h2");
     title.textContent = formatTitle(key);
     container.appendChild(title);
 
+<<<<<<< HEAD
 
+=======
+    // conteúdo
+>>>>>>> 21c8dbeb309216aae56f91f215a45f29c5635dba
     if (Array.isArray(value)) {
       const ul = document.createElement("ul");
 
@@ -148,7 +156,14 @@ function renderAnalysis(data) {
   });
 }
 
+<<<<<<< HEAD
 
 function formatTitle(text) {
   return text.charAt(0).toUpperCase() + text.slice(1);
 }
+=======
+// deixa bonito tipo "dificuldades" → "Dificuldades"
+function formatTitle(text) {
+  return text.charAt(0).toUpperCase() + text.slice(1);
+}
+>>>>>>> 21c8dbeb309216aae56f91f215a45f29c5635dba
