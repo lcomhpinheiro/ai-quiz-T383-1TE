@@ -84,8 +84,7 @@ async function submitAnswers() {
 
     const data = await res.json();
 
-    document.getElementById("result").textContent =
-      JSON.stringify(data, null, 2);
+    renderAnalysis(data);
 
   } catch (err) {
     console.error(err);
@@ -102,7 +101,7 @@ async function generateQuiz() {
   }
 
   try {
-    const res = await fetch("https://ai-quiz-students-backend.onrender.com/quiz/generate", {
+    const res = await fetch(API_URL + "/generate", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -118,4 +117,38 @@ async function generateQuiz() {
     console.error(err);
     alert("Erro ao gerar quiz");
   }
+}
+
+function renderAnalysis(data) {
+  const container = document.getElementById("result");
+  container.innerHTML = "";
+
+  Object.entries(data).forEach(([key, value]) => {
+    // título
+    const title = document.createElement("h2");
+    title.textContent = formatTitle(key);
+    container.appendChild(title);
+
+    // conteúdo
+    if (Array.isArray(value)) {
+      const ul = document.createElement("ul");
+
+      value.forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = item;
+        ul.appendChild(li);
+      });
+
+      container.appendChild(ul);
+    } else {
+      const p = document.createElement("p");
+      p.textContent = value;
+      container.appendChild(p);
+    }
+  });
+}
+
+// deixa bonito tipo "dificuldades" → "Dificuldades"
+function formatTitle(text) {
+  return text.charAt(0).toUpperCase() + text.slice(1);
 }
