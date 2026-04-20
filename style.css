@@ -37,6 +37,8 @@ h1 {
 
 
 input {
+  font-size: 22px;
+  margin: 15px;
   background-color: var(--bg-dark);
   border: 1px solid var(--border);
   color: var(--fg);
@@ -57,6 +59,8 @@ input:focus {
 
 
 select {
+  font-size: 22px;
+  margin: 15px;
   background-color: var(--bg-dark);
   border: 1px solid var(--border);
   color: var(--fg);
@@ -67,6 +71,7 @@ select {
 
 
 button {
+  font-size: 22px;
   background-color: var(--blue);
   color: var(--bg);
   border: none;
@@ -93,6 +98,7 @@ button:hover {
 
 
 #quizContainer p {
+  font-size: 24px;
   margin-bottom: 8px;
   color: var(--fg);
 }
@@ -102,18 +108,6 @@ button:hover {
   margin-bottom: 20px;
 }
 
-
-pre {
-  margin-top: 20px;
-  background-color: var(--bg-dark);
-  padding: 20px;
-  border-radius: 10px;
-  border: 1px solid var(--border);
-  color: var(--green);
-  overflow-x: auto;
-}
-
-
 button:last-of-type {
   margin: 20px 10px;
   background-color: var(--green);
@@ -121,4 +115,40 @@ button:last-of-type {
 
 button:last-of-type:hover {
   background-color: var(--cyan);
+}
+
+#result {
+  font-size: 24px;
+  margin-top: 20px;
+  background-color: var(--bg-dark);
+  padding: 20px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  color: var(--fg);
+  line-height: 1.6;
+}
+
+
+#result h2 {
+  color: var(--purple);
+  font-size: 28px;
+  margin-bottom: 10px;
+  margin-top: 15px;
+}
+
+#result h2:first-child {
+  margin-top: 0;
+}
+
+#result p {
+  margin-bottom: 12px;
+}
+
+#result ul {
+  margin-left: 20px;
+
+}
+
+#result li {
+  margin-bottom: 5px;
 }
