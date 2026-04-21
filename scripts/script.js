@@ -67,27 +67,41 @@ function getAnswers() {
 async function submitAnswers() {
   const answers = getAnswers();
 
-  try {
-    const res = await fetch(API_URL + "/submit", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        quiz: currentQuiz,
-        answers: answers
-      })
-    });
+  const maxRetries = 5;
+  let attempt = 0;
 
-    if (!res.ok) throw new Error("Erro ao enviar respostas");
+  while (attempt < maxRetries) {
+    try {
+      const res = await fetch(API_URL + "/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          quiz: currentQuiz,
+          answers: answers
+        })
+      });
 
-    const data = await res.json();
+      if (!res.ok) throw new Error("Erro na resposta");
 
-    renderAnalysis(data);
+      const data = await res.json();
 
-  } catch (err) {
-    console.error(err);
-    alert("Erro ao enviar respostas");
+      renderAnalysis(data);
+      return;
+
+    } catch (err) {
+      attempt++;
+
+      console.warn(`Tentativa ${attempt} falhou`);
+
+      if (attempt >= maxRetries) {
+        console.error(err);
+        alert("Erro ao enviar respostas após várias tentativas");
+        return;
+      }
+      await new Promise(resolve => setTimeout(resolve, 1000 * attempt));
+    }
   }
 }
 
@@ -98,23 +112,43 @@ async function generateQuiz() {
     alert("Digite um tema");
     return;
   }
+
+  document.getElementById("quizContent").innerHTML = "";
   document.getElementById("result").innerHTML = "";
-  try {
-    const res = await fetch(API_URL + "/generate", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ topic })
-    });
 
-    const quiz = await res.json();
+  const maxRetries = 5;
+  let attempt = 0;
 
-    renderQuiz(quiz);
+  while (attempt < maxRetries) {
+    try {
+      const res = await fetch(API_URL + "/generate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ topic })
+      });
 
-  } catch (err) {
-    console.error(err);
-    alert("Erro ao gerar quiz");
+      if (!res.ok) throw new Error("Erro na resposta");
+
+      const quiz = await res.json();
+
+      renderQuiz(quiz);
+      return;
+
+    } catch (err) {
+      attempt++;
+
+      console.warn(`Tentativa ${attempt} falhou`);
+
+      if (attempt >= maxRetries) {
+        console.error(err);
+        alert("Erro ao gerar quiz após várias tentativas");
+        return;
+      }
+
+      await new Promise(resolve => setTimeout(resolve, 1000 * attempt));
+    }
   }
 }
 
