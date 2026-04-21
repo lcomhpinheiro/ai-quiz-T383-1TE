@@ -98,7 +98,7 @@ async function generateQuiz() {
     alert("Digite um tema");
     return;
   }
-
+  document.getElementById("result").innerHTML = "";
   try {
     const res = await fetch(API_URL + "/generate", {
       method: "POST",
@@ -143,10 +143,6 @@ function renderAnalysis(data) {
       container.appendChild(p);
     }
   });
-}
-
-function formatTitle(text) {
-  return text.charAt(0).toUpperCase() + text.slice(1);
 }
 
 function formatTitle(text) {
