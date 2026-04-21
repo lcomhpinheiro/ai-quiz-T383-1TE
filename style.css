@@ -152,3 +152,36 @@ button:last-of-type:hover {
 #result li {
   margin-bottom: 5px;
 }
+
+@media screen and (max-width: 500px) {
+  body {
+    padding: 20px;
+  }
+
+  h1 {
+    text-align: center;
+    margin: 20px 0;
+  }
+
+  #topic {
+    display: block;
+    width: 100%;
+    margin: 0 0 20px 0;
+  }
+
+  input,
+  select,
+  button {
+    width: 100%;
+    margin: 10px 0;
+  }
+
+  button:last-of-type {
+    margin: 0 auto;
+  }
+
+  #quizContainer {
+    margin: 20px 0;
+    padding: 15px;
+  }
+}

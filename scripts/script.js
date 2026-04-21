@@ -43,7 +43,6 @@ function renderQuiz(quiz) {
       input.type = "text";
       input.id = `q_${index}`;
       input.placeholder = "Digite sua resposta";
-      input.style.width = "300px";
 
       wrapper.appendChild(input);
     }
@@ -153,4 +152,3 @@ function formatTitle(text) {
 function formatTitle(text) {
   return text.charAt(0).toUpperCase() + text.slice(1);
 }
-
