@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Teste Quiz IA</title>
+  <link rel="stylesheet" href="./style.css">
+  <meta http-equiv="Content-Security-Policy" content="default-src * 'self' data: blob: 'unsafe-inline' 'unsafe-eval';">
+</head>
+<body>
+
+
+<h1>Gerar Quiz</h1>
+
+<input type="text" id="topic" placeholder="Digite o tema">
+<button onclick="generateQuiz()">Gerar</button>
+
+
+<div id="quizContainer"></div>
+<button onclick="submitAnswers()">Enviar respostas</button>
+<div id="result"></div>
+
+<script src="./scripts/script.js"></script>
+
+</body>
+</html>

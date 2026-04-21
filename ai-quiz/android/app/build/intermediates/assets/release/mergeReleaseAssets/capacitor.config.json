@@ -1,0 +1,10 @@
+{
+	"appId": "com.aiquiz.app",
+	"appName": "AI QUIZ",
+	"webDir": "build",
+	"plugins": {
+		"SplashScreen": {
+			"launchAutoHide": false
+		}
+	}
+}
