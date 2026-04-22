@@ -113,7 +113,7 @@ async function generateQuiz() {
     return;
   }
 
-  document.getElementById("quizContent").innerHTML = "";
+  document.getElementById("quizContainer").innerHTML = "";
   document.getElementById("result").innerHTML = "";
 
   const maxRetries = 5;
