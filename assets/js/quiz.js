@@ -1,6 +1,33 @@
-const API_URL = "https://ai-quiz-students-backend.onrender.com/quiz";
+//const API_URL = "https://ai-quiz-students-backend.onrender.com/quiz";
 //const API_URL = "http://localhost:3000/quiz";
+const API_URL = 'http://localhost:3000'
 let currentQuiz = null;
+
+
+document.addEventListener("DOMContentLoaded", async () => {
+  const token = localStorage.getItem('Token')
+
+  if (!token) {
+    window.location.href = '../login/index.html'
+    return
+  }
+  try {
+    const response = await fetch(`${API_URL}/auth/me`, {
+      method: 'GET',
+      headers: {
+        'authorization': `Bearer ${token}`
+      }})
+      if (!response.ok) {
+        throw new Error('Token inválido');
+      }
+  } catch(err){
+    alert(err)
+    console.error("Erro de autenticação:", err)
+    localStorage.removeItem('Token')
+    window.location.href = '../login/index.html'
+  }
+})
+
 
 
 function renderQuiz(quiz) {
@@ -72,7 +99,7 @@ async function submitAnswers() {
 
   while (attempt < maxRetries) {
     try {
-      const res = await fetch(API_URL + "/submit", {
+      const res = await fetch(API_URL + "/quiz/submit", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -121,7 +148,7 @@ async function generateQuiz() {
 
   while (attempt < maxRetries) {
     try {
-      const res = await fetch(API_URL + "/generate", {
+      const res = await fetch(API_URL + "/quiz/generate", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
