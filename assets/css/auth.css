@@ -1,0 +1,122 @@
+:root {
+    --bg: #1a1b26;
+    --bg-dark: #16161e;
+    --fg: #c0caf5;
+    --fg-dim: #a9b1d6;  
+    --blue: #7aa2f7;
+    --cyan: #7dcfff;
+    --green: #9ece6a;
+    --purple: #bb9af7;
+    --red: #f7768e;
+    --yellow: #e0af68;  
+    --border: #2f334d;
+}
+
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: system-ui, -apple-system, sans-serif;
+    background-color: var(--bg-dark);
+    color: var(--fg);
+}
+
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.auth-card {
+    background-color: var(--bg);
+    width: 100%;
+    max-width: 340px;
+    padding: 30px;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+    h2{
+      margin-bottom: 8px;
+    }
+    p {
+    color: var(--fg-dim);
+    font-size: 14px;
+    margin-bottom: 24px;
+    }
+}
+
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    label {
+    font-size: 13px;
+    color: var(--fg-dim);
+    }
+    input {
+    height: 42px;
+    padding: 0 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background-color: var(--bg-dark);
+    color: var(--fg);
+    outline: none;
+    transition: 0.2s;
+    }
+}
+
+
+.input-group input:focus {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 2px rgba(122, 162, 247, 0.2);
+}
+
+button {
+    height: 44px;
+    border: none;
+    border-radius: 8px;
+    background-color: var(--blue);
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+button:hover {
+    filter: brightness(1.1);
+}
+
+button:active {
+    transform: scale(0.98);
+}
+
+.card-footer {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--fg-dim);
+}
+
+.card-footer a {
+    color: var(--cyan);
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+.card-footer a:hover {
+    text-decoration: underline;
+}

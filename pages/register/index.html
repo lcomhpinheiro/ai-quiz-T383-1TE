@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Quiz - Registro</title>
+    <link rel="stylesheet" href="../../assets/css/auth.css">
+</head>
+
+<body>
+    <main class="login-container">
+        <div class="auth-card">
+            <h2>Criar Conta</h2>
+            <p>Preencha os dados abaixo para se cadastrar</p>
+            
+            <form class="auth-form">
+                <div class="input-group">
+                    <label for="name">Nome Completo</label>
+                    <input type="text" id="name" placeholder="Seu nome" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" placeholder="seu@email.com" required>
+                </div>
+                
+                <div class="input-group">
+                    <label for="password">Senha</label>
+                    <input type="password" id="password" placeholder="Senha" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="confirm-password">Confirmar Senha</label>
+                    <input type="password" id="confirm-password" placeholder="Repita a senha" required>
+                </div>
+                
+                <button type="submit">Cadastrar</button>
+            </form>
+            
+            <div class="card-footer">
+                <span>Já tem uma conta? <a href="../login/index.html">Fazer login</a></span>
+            </div>
+        </div>
+    </main>
+    <script src="../../assets/js/register.js"></script>
+</body>
+</html>
