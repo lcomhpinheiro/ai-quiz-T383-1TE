@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     return
   }
   try {
-    const response = await fetch(`${API_URL}/auth/me`, {
+    const response = await fetch(`${API_URL}/user/me`, {
       method: 'GET',
       headers: {
         'authorization': `Bearer ${token}`
