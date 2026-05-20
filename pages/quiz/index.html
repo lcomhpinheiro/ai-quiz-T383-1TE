@@ -3,20 +3,55 @@
 <head>
   <meta charset="UTF-8">
   <title>AI Quiz - Gerar Quiz</title>
+  <script src="../../assets/js/auth-guard.js"></script>
   <link rel="stylesheet" href="../../assets/css/quiz.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
 
-<h1>Gerar Quiz</h1>
+<button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
 
-<input type="text" id="topic" placeholder="Digite o tema">
-<button onclick="generateQuiz()">Gerar</button>
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <h2 id="userNameGreeting">Carregando...</h2>
+  </div>
+  
+  <nav class="sidebar-nav">
+    <a href="../quiz/index.html" class="nav-item active">
+      <span>📝</span> Gerar Quiz
+    </a>
+    <a href="../profile/index.html" class="nav-item">
+      <span>👤</span> Meu Perfil
+    </a>
+    <a href="../schedule/index.html" class="nav-item">
+      <span>📅</span> Cronograma
+    </a>
+  </nav>
 
-<div id="quizContainer"></div>
-<button onclick="submitAnswers()">Enviar respostas</button>
-<div id="result"></div>
+  <button class="logout-btn" onclick="logout()">
+    <span>🚪</span> Sair
+  </button>
+</aside>
 
-<script src="../../assets/js/quiz.js"></script>
+<main class="main-content">
+  <div class="content-wrapper">
+    <h1>AI Study Quiz</h1>
+
+    <div class="search-container">
+      <input type="text" id="topic" placeholder="Qual tema vamos estudar hoje?">
+      <button class="btn-generate" onclick="generateQuiz()">Gerar Quiz</button>
+    </div>
+
+    <div id="quizContainer"></div>
+    
+    <button class="btn-submit" id="submitBtn" onclick="submitAnswers()">
+      Finalizar e Analisar
+    </button>
+
+    <div id="result"></div>
+  </div>
+</main>
+
+  <script src="../../assets/js/quiz.js"></script>
 </body>
 </html>

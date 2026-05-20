@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Quiz - Configurar Horário</title>
+    <script src="../../assets/js/auth-guard.js"></script>
+    <link rel="stylesheet" href="../../assets/css/auth.css">
+    <link rel="stylesheet" href="../../assets/css/schedule.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div id="notification-container"></div>
+
+    <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2 id="userNameGreeting">Carregando...</h2>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <a href="../quiz/index.html" class="nav-item">
+                <span>📝</span> Gerar Quiz
+            </a>
+            <a href="../profile/index.html" class="nav-item">
+                <span>👤</span> Meu Perfil
+            </a>
+            <a href="../schedule/index.html" class="nav-item active">
+                <span>📅</span> Cronograma
+            </a>
+        </nav>
+
+        <button class="logout-btn" onclick="logout()">
+            <span>🚪</span> Sair
+        </button>
+    </aside>
+
+    <main class="main-content">
+        <div class="auth-card schedule-card">
+            <div class="header-actions">
+                <div>
+                    <h2>Configurar Horário</h2>
+                    <p>Monte sua grade escolar para que possamos organizar seus estudos.</p>
+                </div>
+                <button type="button" id="btn-edit" class="btn-edit hidden" onclick="enableEditing()">Editar</button>
+            </div>
+            
+            <form class="auth-form" id="schedule-form">
+                <div class="input-group">
+                    <label for="school-year">Ano Escolar</label>
+                    <select id="school-year">
+                        <option value="" disabled selected>Selecione seu ano</option>
+                        <optgroup label="Ensino Fundamental">
+                            <option value="1f">1º Ano</option>
+                            <option value="2f">2º Ano</option>
+                            <option value="3f">3º Ano</option>
+                            <option value="4f">4º Ano</option>
+                            <option value="5f">5º Ano</option>
+                            <option value="6f">6º Ano</option>
+                            <option value="7f">7º Ano</option>
+                            <option value="8f">8º Ano</option>
+                            <option value="9f">9º Ano</option>
+                        </optgroup>
+                        <optgroup label="Ensino Médio">
+                            <option value="1m">1º Ano</option>
+                            <option value="2m">2º Ano</option>
+                            <option value="3m">3º Ano</option>
+                        </optgroup>
+                    </select>
+                </div>
+
+                <div class="input-group hidden" id="modality-group">
+                    <label for="modality">Modalidade</label>
+                    <select id="modality">
+                        <option value="" disabled selected>Selecione a modalidade</option>
+                        <option value="regular">Regular (6 aulas)</option>
+                        <option value="integral">Integral (9 aulas)</option>
+                    </select>
+                </div>
+
+                <div class="schedule-table-container hidden" id="table-container">
+                    <table class="schedule-table">
+                        <thead>
+                            <tr>
+                                <th>Horário</th>
+                                <th>Segunda</th>
+                                <th>Terça</th>
+                                <th>Quarta</th>
+                                <th>Quinta</th>
+                                <th>Sexta</th>
+                            </tr>
+                        </thead>
+                        <tbody id="schedule-body">
+                            <!-- Gerado via JS -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="actions hidden">
+                    <button type="submit">Salvar Horário</button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script src="../../assets/js/schedule.js"></script>
+</body>
+</html>

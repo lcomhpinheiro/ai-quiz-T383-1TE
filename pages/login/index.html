@@ -4,24 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Quiz - Login</title>
+    <script src="../../assets/js/auth-guard.js"></script>
     <link rel="stylesheet" href="../../assets/css/auth.css">
 </head>
 
 <body>
+    <div id="notification-container"></div>
+
     <main class="login-container">
         <div class="auth-card">
             <h2>Bem-vindo</h2>
             <p>Faça login para continuar</p>
             
-            <form class="auth-form">
+            <form class="auth-form" novalidate>
                 <div class="input-group">
                     <label for="username">Usuário ou Email</label>
-                    <input type="text" id="username" placeholder="Usuário" required>
+                    <input type="text" id="username" placeholder="Usuário">
+                    <span class="error-message">Usuário ou email é obrigatório</span>
                 </div>
                 
                 <div class="input-group">
                     <label for="password">Senha</label>
-                    <input type="password" id="password" placeholder="Senha" required>
+                    <input type="password" id="password" placeholder="Senha">
+                    <span class="error-message">Senha é obrigatória</span>
                 </div>
                 
                 <button type="submit">Entrar</button>

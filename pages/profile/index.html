@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil do Usuário - AI Study</title>
+    <!-- Cropper.js CSS -->
+    <script src="../../assets/js/auth-guard.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
+    <link rel="stylesheet" href="../../assets/css/profile.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2 id="userNameGreeting">Carregando...</h2>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <a href="../quiz/index.html" class="nav-item">
+                <span>📝</span> Gerar Quiz
+            </a>
+            <a href="../profile/index.html" class="nav-item active">
+                <span>👤</span> Meu Perfil
+            </a>
+            <a href="../schedule/index.html" class="nav-item">
+                <span>📅</span> Cronograma
+            </a>
+        </nav>
+
+        <button class="logout-btn" onclick="logout()">
+            <span>🚪</span> Sair
+        </button>
+    </aside>
+
+    <main class="main-content">
+        <div class="content-wrapper">
+            <h1>Seu Perfil</h1>
+
+            <div class="profile-card">
+                <div id="profile-picture-container">
+                    <img id="profile-img" src="" alt="Foto de Perfil">
+                    <label for="image-upload" class="upload-label">Alterar Foto</label>
+                    <input type="file" id="image-upload" accept="image/*">
+                </div>
+
+                <div class="user-info-section">
+                    <div class="info-item">
+                        <strong>Username</strong>
+                        <span id="username">Carregando...</span>
+                    </div>
+                    <div class="info-item">
+                        <strong>Nome Completo</strong>
+                        <span id="name">Carregando...</span>
+                    </div>
+                    <div class="info-item">
+                        <strong>E-mail</strong>
+                        <span id="email">Carregando...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal para Corte -->
+    <div id="cropper-modal" class="modal">
+        <div class="modal-content">
+            <h3>Ajustar Imagem</h3>
+            <div class="img-container">
+                <img id="image-to-crop" src="">
+            </div>
+            <div class="btn-group">
+                <button id="cancel-crop">Cancelar</button>
+                <button id="confirm-crop">Salvar Alteração</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cropper.js JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+    <script src="../../assets/js/profile.js"></script>
+</body>
+</html>
