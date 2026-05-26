@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,23 +16,24 @@
         <div class="auth-card">
             <h2>Bem-vindo</h2>
             <p>Faça login para continuar</p>
-            
+            <button id="btn-tema" class="btn-tema">🌙 Tema Escuro</button>
+
             <form class="auth-form" novalidate>
                 <div class="input-group">
                     <label for="username">Usuário ou Email</label>
                     <input type="text" id="username" placeholder="Usuário">
                     <span class="error-message">Usuário ou email é obrigatório</span>
                 </div>
-                
+
                 <div class="input-group">
                     <label for="password">Senha</label>
                     <input type="password" id="password" placeholder="Senha">
                     <span class="error-message">Senha é obrigatória</span>
                 </div>
-                
+
                 <button type="submit">Entrar</button>
             </form>
-            
+
             <div class="card-footer">
                 <a href="#">Esqueceu a senha?</a>
                 <span>Não tem conta? <a href="../register/index.html">Criar conta</a></span>

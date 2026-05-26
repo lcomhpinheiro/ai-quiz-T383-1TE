@@ -82,3 +82,17 @@ form.addEventListener('submit', async (e) => {
         showNotification('Erro ao conectar com o servidor. Tente novamente mais tarde.')
     }
 })
+
+const savedTheme = localStorage.getItem("theme");
+if (savedTheme === "light") {
+    document.body.classList.add("light");
+    document.getElementById("btn-tema").textContent = "☀️ Tema Claro";
+}
+
+document.getElementById("btn-tema").addEventListener("click", () => {
+    document.body.classList.toggle("light");
+    const isLight = document.body.classList.contains("light");
+    localStorage.setItem("theme", isLight ? "light" : "dark");
+
+    document.getElementById("btn-tema").textContent = isLight ? "☀️ Tema Claro" : "🌙 Tema Escuro";
+});
