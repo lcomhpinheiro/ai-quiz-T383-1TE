@@ -1,15 +1,29 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+    <script src="../../assets/js/auth-guard.js"></script>
   <meta charset="UTF-8">
-  <title>AI Quiz - Gerar Quiz</title>
-  <script src="../../assets/js/auth-guard.js"></script>
+  <link rel="icon" type="image/png" href="../../assets/icons/Muriquiz - Mini Logo.png">
+  <title>Muriquiz - Aprendizado</title>
+  <script>
+    (function() {
+      const savedTheme = localStorage.getItem('preferred-theme') || 'dark';
+      if (savedTheme !== 'dark') {
+        document.documentElement.classList.add(savedTheme + '-theme');
+      }
+    })();
+  </script>
+  <link rel="stylesheet" href="../../assets/css/themes.css">
   <link rel="stylesheet" href="../../assets/css/quiz.css">
+  <link rel="stylesheet" href="../../assets/css/learning.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
+  <div id="page-loader" class="page-loader">
+    <div class="loader-spinner"></div>
+  </div>
 
-<button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
+<button class="sidebar-toggle" onclick="toggleSidebar()"><i data-lucide="menu"></i></button>
 
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-header">
@@ -17,41 +31,395 @@
   </div>
   
   <nav class="sidebar-nav">
-    <a href="../quiz/index.html" class="nav-item active">
-      <span>📝</span> Gerar Quiz
+    <a href="../../pages/quiz/index.html" class="nav-item active">
+      <i data-lucide="graduation-cap"></i> Aprendizado
     </a>
-    <a href="../profile/index.html" class="nav-item">
-      <span>👤</span> Meu Perfil
+    <a href="../../pages/profile/index.html" class="nav-item">
+      <i data-lucide="user"></i> Meu Perfil
     </a>
-    <a href="../schedule/index.html" class="nav-item">
-      <span>📅</span> Cronograma
+    <a href="../../pages/friends/index.html" class="nav-item">
+      <i data-lucide="users"></i> Amigos
+    </a>
+    <a href="../../pages/schedule/index.html" class="nav-item">
+      <i data-lucide="calendar-range"></i> Cronograma
     </a>
   </nav>
 
+  <div class="sidebar-divider"></div>
+  
+  <div class="sidebar-settings">
+    <div class="settings-header" onclick="toggleSettings()">
+      <p class="settings-title">Configurações</p>
+      <i data-lucide="chevron-up"></i>
+    </div>
+    <div class="settings-content">
+      <div class="theme-options">
+        <button class="theme-btn" data-theme="dark" onclick="setTheme('dark')" title="Tema Escuro"><i data-lucide="moon"></i></button>
+        <button class="theme-btn" data-theme="light" onclick="setTheme('light')" title="Tema Claro"><i data-lucide="sun"></i></button>
+        <button class="theme-btn" data-theme="contrast" onclick="setTheme('contrast')" title="Alto Contraste"><i data-lucide="accessibility"></i></button>
+      </div>
+      <a href="../../pages/settings/advanced/index.html" class="delete-account-btn" style="text-decoration: none;">
+        <i data-lucide="settings"></i> Avançado
+      </a>
+    </div>
+  </div>
+
   <button class="logout-btn" onclick="logout()">
-    <span>🚪</span> Sair
+    <i data-lucide="log-out"></i> Sair
   </button>
 </aside>
 
 <main class="main-content">
-  <div class="content-wrapper">
-    <h1>AI Study Quiz</h1>
+  <div class="content-wrapper" id="main-wrapper">
+    
+    <!-- Tela de Seleção -->
+    <section id="selection-screen">
+      <h1>Área de Aprendizado</h1>
+      <div class="learning-options">
+        <div class="option-card" onclick="showQuickQuizConfig()">
+          <div class="card-icon"><i data-lucide="zap"></i></div>
+          <h3>Quiz Rápido</h3>
+          <p>Estude um tema específico com perguntas cronometradas.</p>
+        </div>
+        <div class="option-card" onclick="showCombatConfig()">
+          <div class="card-icon"><i data-lucide="swords"></i></div>
+          <h3>Combate de Time</h3>
+          <p>Desafie seus amigos em uma batalha de conhecimentos em tempo real.</p>
+        </div>
+        <div class="option-card" onclick="showMicroEnemConfig()">
+          <div class="card-icon"><i data-lucide="scroll-text"></i></div>
+          <h3>Micro-ENEM</h3>
+          <p>Revisão aleatória baseada nas provas oficiais do ENEM.</p>
+        </div>
+        <!-- Card do Modo Redação -->
+        <div class="option-card" onclick="showEssayConfig()">
+          <div class="card-icon"><i data-lucide="pencil-line"></i></div>
+          <h3>Redação</h3>
+          <p>Treine a produção textual do ENEM com temas atuais e textos norteadores gerados por IA.</p>
+        </div>
+        <div class="option-card" onclick="window.location.href='../history/index.html'">
+          <div class="card-icon"><i data-lucide="history"></i></div>
+          <h3>Meus Estudos</h3>
+          <p>Reveja suas sessões passadas e as análises da IA.</p>
+        </div>
+      </div>
+    </section>
 
-    <div class="search-container">
-      <input type="text" id="topic" placeholder="Qual tema vamos estudar hoje?">
-      <button class="btn-generate" onclick="generateQuiz()">Gerar Quiz</button>
+    <!-- Configuração Redação -->
+    <section id="essay-config" class="hidden">
+      <button class="btn-back" onclick="showSelection()"><i data-lucide="arrow-left"></i> Voltar</button>
+      <h2>Modo Redação</h2>
+      <div class="config-container">
+        <!-- Descrição do modo -->
+        <div class="essay-mode-info">
+          <div class="essay-mode-icon"><i data-lucide="pen-tool"></i></div>
+          <p>
+            No modo <strong>Redação</strong> você vai treinar a produção textual exigida no ENEM.
+            A IA vai gerar um <strong>tema atual e relevante</strong>, você terá <strong>30 linhas numeradas</strong>
+            para escrever sua redação e <strong>textos norteadores</strong> para ajudar na argumentação.
+          </p>
+          <ul class="essay-features-list">
+            <li><i data-lucide="sparkles" style="width:16px; color:var(--yellow); vertical-align:middle; margin-right:8px;"></i> <strong>Tema gerado por IA</strong> — atual, relevante e com competências do ENEM</li>
+            <li><i data-lucide="align-left" style="width:16px; color:var(--blue); vertical-align:middle; margin-right:8px;"></i> <strong>30 linhas numeradas</strong> — área de escrita confortável e estruturada</li>
+            <li><i data-lucide="book-open" style="width:16px; color:var(--green); vertical-align:middle; margin-right:8px;"></i> <strong>Textos norteadores</strong> — argumentos, dados e exemplos como apoio</li>
+            <li><i data-lucide="save" style="width:16px; color:var(--purple); vertical-align:middle; margin-right:8px;"></i> <strong>Rascunho automático</strong> — seu progresso é salvo localmente</li>
+          </ul>
+        </div>
+        <button onclick="startEssayMode()" class="btn-primary" id="start-essay-btn" style="height: auto; padding: 20px; font-size: 1.3rem; margin-top: 10px;">
+          <i data-lucide="pencil" style="width:22px; vertical-align:middle; margin-right:10px;"></i>
+          Iniciar Redação
+        </button>
+      </div>
+    </section>
+
+    <!-- Área de Escrita da Redação -->
+    <section id="essay-area" class="hidden">
+      <!-- Cabeçalho da Redação -->
+      <div class="essay-header">
+        <div class="essay-theme-block">
+          <div class="essay-theme-label">
+            <i data-lucide="target"></i>
+            <span>Tema da Redação</span>
+          </div>
+          <h2 id="essay-theme-title">Carregando tema...</h2>
+          <div id="essay-competencias" class="essay-competencias"></div>
+        </div>
+        <div class="essay-header-actions">
+          <div id="essay-stats" class="essay-stats">
+            <span id="essay-line-count">0 linhas</span>
+            <span class="essay-stats-sep">·</span>
+            <span id="essay-word-count">0 palavras</span>
+          </div>
+          <button class="btn-essay-action btn-norteadores" onclick="openNorteadoresModal()" id="btn-norteadores">
+            <i data-lucide="book-open"></i>
+            Textos Norteadores
+          </button>
+          <button class="btn-essay-action btn-draft" onclick="saveDraft()" id="btn-save-draft">
+            <i data-lucide="save"></i>
+            Salvar Rascunho
+          </button>
+          <button class="btn-essay-action btn-exit-essay" onclick="exitEssayMode()">
+            <i data-lucide="log-out"></i>
+            Sair
+          </button>
+        </div>
+      </div>
+
+      <!-- Área de Escrita com Linhas Numeradas -->
+      <div class="essay-paper">
+        <div class="essay-paper-inner">
+          <!-- Numeração das linhas (lado esquerdo) -->
+          <div class="essay-line-numbers" id="essay-line-numbers"></div>
+          <!-- Área de texto -->
+          <textarea
+            id="essay-textarea"
+            class="essay-textarea"
+            placeholder="Comece a escrever sua redação aqui..."
+            oninput="onEssayInput()"
+            onkeydown="onEssayKeydown(event)"
+            spellcheck="true"
+            lang="pt-BR"
+          ></textarea>
+          <!-- Visualização da Redação Corrigida -->
+          <div id="essay-corrected-view" class="essay-corrected-view hidden"></div>
+        </div>
+      </div>
+
+      <!-- Barra inferior de ações -->
+      <div class="essay-bottom-bar">
+        <div class="essay-progress">
+          <div class="essay-progress-bar">
+            <div class="essay-progress-fill" id="essay-progress-fill"></div>
+          </div>
+          <span id="essay-progress-text">0 / 30 linhas</span>
+        </div>
+        <div class="essay-bottom-actions" id="essay-bottom-actions">
+          <button class="btn-essay-correct" id="btn-correct-essay" onclick="correctEssay()">
+            <i data-lucide="brain-circuit"></i>
+            Corrigir Redação
+          </button>
+        </div>
+      </div>
+
+      <!-- Resultados da Correção por IA -->
+      <div id="essay-correction-results" class="essay-correction-results hidden">
+        <!-- Feedback Geral -->
+        <div class="essay-results-card">
+          <div class="essay-results-header">
+            <i data-lucide="award"></i>
+            <h3>Feedback Geral do Corretor</h3>
+          </div>
+          <div class="essay-general-feedback" id="essay-general-feedback"></div>
+        </div>
+
+        <!-- Notas Explicativas -->
+        <div class="essay-results-card">
+          <div class="essay-results-header">
+            <i data-lucide="info"></i>
+            <h3>Notas Explicativas</h3>
+          </div>
+          <div class="essay-notes-list" id="essay-notes-list"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Modal de Textos Norteadores -->
+    <div class="norteadores-overlay hidden" id="norteadores-overlay" onclick="closeNorteadoresModal(event)">
+      <div class="norteadores-modal" id="norteadores-modal">
+        <div class="norteadores-header">
+          <div class="norteadores-title">
+            <i data-lucide="book-open"></i>
+            <h3>Textos Norteadores</h3>
+          </div>
+          <button class="norteadores-close" onclick="closeNorteadoresModal()">
+            <i data-lucide="x"></i>
+          </button>
+        </div>
+        <div class="norteadores-content" id="norteadores-content">
+          <div class="norteadores-loading">
+            <div class="loader-spinner" style="width:28px; height:28px; margin: 0 auto 16px;"></div>
+            <p>A IA está preparando os textos de apoio...</p>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div id="quizContainer"></div>
-    
-    <button class="btn-submit" id="submitBtn" onclick="submitAnswers()">
-      Finalizar e Analisar
-    </button>
+    <!-- Configuração Micro-ENEM -->
+    <section id="micro-enem-config" class="hidden">
+      <button class="btn-back" onclick="showSelection()"><i data-lucide="arrow-left"></i> Voltar</button>
+      <h2>Sobre o Micro-ENEM</h2>
+      <div class="config-container">
+        <div style="margin-bottom: 25px; color: var(--fg-dim); line-height: 1.6;">
+          <p>O <strong>Micro-ENEM</strong> é um simulado intensivo focado nas provas oficiais. Você enfrentará 20 questões selecionadas aleatoriamente (5 de cada área do conhecimento).</p>
+          <ul style="margin-top: 15px; list-style-type: none; padding-left: 0;">
+            <li style="margin-bottom: 10px;"><i data-lucide="clock" style="width: 16px; color: var(--yellow); vertical-align: middle; margin-right: 8px;"></i> <strong>3 minutos por questão</strong></li>
+            <li style="margin-bottom: 10px;"><i data-lucide="brain-circuit" style="width: 16px; color: var(--purple); vertical-align: middle; margin-right: 8px;"></i> <strong>Explicação Detalhada</strong> por IA após cada resposta</li>
+            <li style="margin-bottom: 10px;"><i data-lucide="award" style="width: 16px; color: var(--green); vertical-align: middle; margin-right: 8px;"></i> <strong>Foco Pedagógico</strong> para entender erros e acertos</li>
+          </ul>
+        </div>
+        
+        <div class="amount-selection" style="margin-bottom: 25px;">
+          <p>Opção de Língua Estrangeira:</p>
+          <div class="radio-group">
+            <div class="amount-chip">
+              <input type="radio" name="micro-enem-lang" id="lang-en" value="ingles" checked>
+              <label for="lang-en">Inglês</label>
+            </div>
+            <div class="amount-chip">
+              <input type="radio" name="micro-enem-lang" id="lang-es" value="espanhol">
+              <label for="lang-es">Espanhol</label>
+            </div>
+          </div>
+        </div>
+        
+        <button onclick="startMicroEnem()" class="btn-primary" style="height: auto; padding: 20px; font-size: 1.3rem;">
+          Iniciar Simulado
+        </button>
+      </div>
+    </section>
 
-    <div id="result"></div>
+    <!-- Configuração Quiz Rápido -->
+    <section id="quick-quiz-config" class="hidden">
+      <button class="btn-back" onclick="showSelection()"><i data-lucide="arrow-left"></i> Voltar</button>
+      <h2>Configurar Quiz Rápido</h2>
+      <div class="config-container">
+        <div id="quick-quiz-standard-inputs">
+          <input type="text" id="quick-topic" placeholder="Qual tema vamos estudar?">
+        </div>
+
+        <!-- Área Administrativa para gerar quiz a partir de links (oculta por padrão) -->
+        <div id="admin-link-quiz-group" class="hidden" style="margin-bottom: 20px;">
+          <p style="color: var(--purple); font-weight: 700; margin-bottom: 8px; font-size: 0.95rem; display: flex; align-items: center; gap: 6px;">
+            <i data-lucide="shield-alert" style="width: 16px; height: 16px;"></i> Gerar Quiz a partir de Links (Admin)
+          </p>
+          <textarea id="quick-quiz-links" placeholder="Insira os links separados por vírgula (ex: https://link1.com, https://link2.com)..." rows="3" style="width: 100%; padding: 12px; border-radius: var(--border-radius); border: 1px solid var(--border); background: var(--bg); color: var(--fg); font-family: inherit; resize: vertical; box-sizing: border-box;"></textarea>
+        </div>
+
+        <div class="amount-selection">
+          <p>Quantidade de perguntas:</p>
+          <div class="radio-group">
+            <div class="amount-chip">
+              <input type="radio" name="amount" id="amt-5" value="5" checked>
+              <label for="amt-5">5</label>
+            </div>
+            <div class="amount-chip">
+              <input type="radio" name="amount" id="amt-10" value="10">
+              <label for="amt-10">10</label>
+            </div>
+            <div class="amount-chip">
+              <input type="radio" name="amount" id="amt-15" value="15">
+              <label for="amt-15">15</label>
+            </div>
+          </div>
+        </div>
+        
+        <button class="btn-primary" id="btn-start-quick-quiz" onclick="startQuickQuiz()">Iniciar Quiz</button>
+        
+        <!-- Botão secundário de Admin para chavear de modo (oculto por padrão) -->
+        <button class="btn-secondary hidden" id="admin-mode-toggle-btn" onclick="toggleAdminLinkMode()" style="margin-top: 12px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;">
+          <i data-lucide="link"></i> Gerar Quiz a partir de links
+        </button>
+      </div>
+    </section>
+
+    <!-- Configuração Combate -->
+    <section id="combat-config" class="hidden">
+      <button class="btn-back" onclick="showSelection()"><i data-lucide="arrow-left"></i> Voltar</button>
+      <h2>Modo Combate</h2>
+      <div class="combat-entry-options">
+        <div class="config-container">
+          <h3>Criar Sala</h3>
+          <input type="text" id="combat-topic" placeholder="Tema do combate">
+          <button class="btn-primary" onclick="createRoom()">Criar Sala</button>
+        </div>
+        <div class="divider-text">OU</div>
+        <div class="config-container">
+          <h3>Entrar em Sala</h3>
+          <input type="text" id="room-code-input" placeholder="Código de 6 dígitos" maxlength="6">
+          <button class="btn-secondary" onclick="joinRoom()">Entrar</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Lobby do Combate -->
+    <section id="combat-lobby" class="hidden">
+      <div class="lobby-header">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+          <div>
+            <h2>Sala: <span id="display-room-code">------</span></h2>
+            <p>Tema: <span id="display-theme">---</span></p>
+          </div>
+          <button class="btn-leave" onclick="leaveRoom()"><i data-lucide="log-out"></i> Sair da Sala</button>
+        </div>
+      </div>
+      <div class="teams-container">
+        <div class="team-box blue-team">
+          <h3>Time Azul</h3>
+          <ul id="blue-team-list"></ul>
+          <button class="btn-team" onclick="selectTeam('blue')">Entrar no Azul</button>
+        </div>
+        <div class="team-box red-team">
+          <h3>Time Vermelho</h3>
+          <ul id="red-team-list"></ul>
+          <button class="btn-team" onclick="selectTeam('red')">Entrar no Vermelho</button>
+        </div>
+        <div class="team-box spectator-team">
+          <h3>Espectadores</h3>
+          <ul id="spectator-list"></ul>
+          <button class="btn-team" onclick="selectTeam('spectator')">Assistir</button>
+        </div>
+      </div>
+      <div id="host-controls" class="hidden">
+        <button class="btn-primary" onclick="startCombat()">Iniciar Combate</button>
+      </div>
+      <p id="wait-message">Aguardando o host iniciar...</p>
+    </section>
+
+    <!-- Área de Jogo (Comum para os dois modos) -->
+    <section id="game-area" class="hidden">
+      <div class="game-header">
+        <div class="timer-container">
+          <i data-lucide="timer"></i>
+          <span id="game-timer">03:00</span>
+        </div>
+        <div id="combat-scoreboard" class="hidden">
+          <div class="score blue">Azul: <span id="score-blue">0</span></div>
+          <div class="score red">Vermelho: <span id="score-red">0</span></div>
+        </div>
+        <div id="game-actions" style="display: flex; align-items: center; gap: 15px;">
+           <div id="quiz-progress">Pergunta <span id="curr-q">1</span> de <span id="total-q">5</span></div>
+           <button class="btn-leave-mini hidden" id="leave-game-btn" onclick="leaveRoom()" title="Sair da Sala" style="background: var(--red); border: none; color: white; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer;"><i data-lucide="log-out" style="width: 16px; height: 16px;"></i></button>
+        </div>
+      </div>
+      
+      <div id="question-container" class="quiz-card">
+        <!-- Pergunta injetada via JS -->
+      </div>
+
+      <button class="btn-submit" id="next-btn" onclick="submitGameAnswer()">
+        Confirmar Resposta
+      </button>
+    </section>
+
+    <!-- Resultados -->
+    <section id="results-screen" class="hidden">
+      <h2 id="results-title">Fim do Quiz!</h2>
+      <div id="results-content"></div>
+      <div class="results-actions" style="display: flex; gap: 10px; justify-content: center; margin-top: 20px;">
+        <button class="btn-primary" onclick="location.reload()">Voltar ao Início</button>
+        <button class="btn-secondary hidden" id="leave-results-btn" onclick="leaveRoom()">Sair da Sala</button>
+      </div>
+    </section>
+
   </div>
 </main>
 
-  <script src="../../assets/js/quiz.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://muriquiz.online/socket.io/socket.io.js"></script>
+  <script src="../../assets/js/learning.js"></script>
+  <script src="../../assets/js/settings.js"></script>
+  <script>
+    lucide.createIcons();
+  </script>
 </body>
 </html>

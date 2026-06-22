@@ -1,11 +1,21 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+    <script src="../../assets/js/auth-guard.js"></script>
     <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="../../assets/icons/Muriquiz - Mini Logo.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Quiz - Login</title>
-    <script src="../../assets/js/auth-guard.js"></script>
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('preferred-theme') || 'dark';
+            if (savedTheme !== 'dark') {
+                document.documentElement.classList.add(savedTheme + '-theme');
+            }
+        })();
+    </script>
     <link rel="stylesheet" href="../../assets/css/auth.css">
+    <link rel="stylesheet" href="../../assets/css/themes.css">
 </head>
 
 <body>
@@ -18,26 +28,35 @@
             
             <form class="auth-form" novalidate>
                 <div class="input-group">
-                    <label for="username">Usuário ou Email</label>
+                    <label for="username"><i data-lucide="user"></i> Usuário ou Email</label>
                     <input type="text" id="username" placeholder="Usuário">
                     <span class="error-message">Usuário ou email é obrigatório</span>
                 </div>
                 
                 <div class="input-group">
-                    <label for="password">Senha</label>
-                    <input type="password" id="password" placeholder="Senha">
+                    <label for="password"><i data-lucide="lock"></i> Senha</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="password" placeholder="Senha">
+                        <button type="button" class="password-toggle" onclick="togglePasswordVisibility('password')">
+                            <i data-lucide="eye-off"></i>
+                        </button>
+                    </div>
                     <span class="error-message">Senha é obrigatória</span>
                 </div>
                 
-                <button type="submit">Entrar</button>
+                <button type="submit" id="submit-btn"><i data-lucide="log-in"></i> Entrar</button>
             </form>
             
             <div class="card-footer">
-                <a href="#">Esqueceu a senha?</a>
-                <span>Não tem conta? <a href="../register/index.html">Criar conta</a></span>
+                <a href="../../pages/forgot-password/index.html"><i data-lucide="help-circle"></i> Esqueceu a senha?</a>
+                <span>Não tem conta? <a href="../../pages/register/index.html"><i data-lucide="user-plus"></i> Criar conta</a></span>
             </div>
         </div>
     </main>
+    <script src="https://unpkg.com/lucide@latest"></script>
     <script src="../../assets/js/login.js"></script>
+    <script>
+      lucide.createIcons();
+    </script>
 </body>
 </html>

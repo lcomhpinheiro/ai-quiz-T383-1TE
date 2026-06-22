@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <script src="../../assets/js/auth-guard.js"></script>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="../../assets/icons/Muriquiz - Mini Logo.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meus Estudos - Muriquiz</title>
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('preferred-theme') || 'dark';
+            if (savedTheme !== 'dark') {
+                document.documentElement.classList.add(savedTheme + '-theme');
+            }
+        })();
+    </script>
+    <link rel="stylesheet" href="../../assets/css/profile.css"> <!-- Reutilizando estilos base -->
+    <link rel="stylesheet" href="../../assets/css/themes.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        .history-container {
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .history-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .empty-history {
+            text-align: center;
+            padding: 100px 20px;
+            background: var(--bg);
+            border: 2px dashed var(--border);
+            border-radius: 20px;
+            grid-column: 1 / -1;
+        }
+
+        .history-card {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            padding: 20px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: var(--transition-fast);
+        }
+        .history-card:hover { border-color: var(--purple); transform: translateY(-3px); }
+        .history-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .history-topic { font-weight: 800; color: var(--fg); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 80%; }
+        .delete-history-btn { background: none; border: none; color: var(--fg-dim); cursor: pointer; transition: 0.2s; }
+        .delete-history-btn:hover { color: var(--red); }
+        .history-date { font-size: 0.85rem; color: var(--fg-dim); }
+        .badge { padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; }
+        .badge-mode { background: rgba(187, 154, 247, 0.1); color: var(--purple); }
+        .badge-score { background: rgba(16, 185, 129, 0.1); color: var(--green); }
+        
+        .history-detail-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 5000; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
+        .history-detail-box { background: var(--bg-dark); width: 90%; max-width: 700px; max-height: 85vh; border-radius: 20px; border: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
+        .history-detail-header { padding: 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; background: var(--bg); }
+        .history-detail-content { padding: 20px; overflow-y: auto; flex: 1; }
+        .history-question-item { margin-bottom: 25px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
+        .history-question-item:last-child { border-bottom: none; }
+    </style>
+</head>
+<body>
+    <div id="page-loader" class="page-loader">
+        <div class="loader-spinner"></div>
+    </div>
+
+    <button class="sidebar-toggle" onclick="toggleSidebar()"><i data-lucide="menu"></i></button>
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2 id="userNameGreeting">Carregando...</h2>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <a href="../../pages/quiz/index.html" class="nav-item">
+              <i data-lucide="graduation-cap"></i> Aprendizado
+            </a>
+            <a href="../../pages/profile/index.html" class="nav-item">
+                <i data-lucide="user"></i> Meu Perfil
+            </a>
+            <a href="../../pages/friends/index.html" class="nav-item">
+                <i data-lucide="users"></i> Amigos
+            </a>
+            <a href="../../pages/schedule/index.html" class="nav-item">
+                <i data-lucide="calendar-range"></i> Cronograma
+            </a>
+        </nav>
+
+        <div class="sidebar-divider"></div>
+  
+        <div class="sidebar-settings">
+            <div class="settings-header" onclick="toggleSettings()">
+                <p class="settings-title">Configurações</p>
+                <i data-lucide="chevron-up"></i>
+            </div>
+            <div class="settings-content">
+                <div class="theme-options">
+                    <button class="theme-btn" data-theme="dark" onclick="setTheme('dark')" title="Tema Escuro"><i data-lucide="moon"></i></button>
+                    <button class="theme-btn" data-theme="light" onclick="setTheme('light')" title="Tema Claro"><i data-lucide="sun"></i></button>
+                    <button class="theme-btn" data-theme="contrast" onclick="setTheme('contrast')" title="Alto Contraste"><i data-lucide="accessibility"></i></button>
+                </div>
+                <a href="../../pages/settings/advanced/index.html" class="delete-account-btn" style="text-decoration: none;">
+                    <i data-lucide="settings"></i> Avançado
+                </a>
+            </div>
+        </div>
+
+        <button class="logout-btn" onclick="logout()">
+            <i data-lucide="log-out"></i> Sair
+        </button>
+    </aside>
+
+    <main class="main-content">
+        <div class="content-wrapper">
+            <button class="btn-back" onclick="window.location.href='../quiz/index.html'" style="background:none; border:none; color:var(--fg-dim); cursor:pointer; font-weight:700; display:flex; align-items:center; gap:8px; margin-bottom:20px;"><i data-lucide="arrow-left"></i> Voltar</button>
+            <h1>Histórico de Estudos</h1>
+            <p style="color: var(--fg-dim); text-align: center; margin-top: -15px;">Reveja suas sessões passadas e as análises da IA.</p>
+
+            <div class="history-container">
+                <div id="history-list" class="history-grid">
+                    <!-- Cards carregados via JS -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Overlay de Detalhes -->
+    <div id="history-detail-overlay" class="history-detail-overlay hidden">
+        <div class="history-detail-box">
+            <div class="history-detail-header">
+                <h2 id="detail-topic" style="color: var(--purple); font-weight: 800; margin: 0; font-size: 1.25rem;">Revisão</h2>
+                <button onclick="closeHistoryDetail()" style="background: none; border: none; color: var(--fg-dim); cursor: pointer; padding: 5px;">
+                    <i data-lucide="x" style="width: 24px; height: 24px;"></i>
+                </button>
+            </div>
+            <div id="history-detail-content" class="history-detail-content">
+                <!-- Injetado via JS -->
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="../../assets/js/history.js"></script>
+    <script src="../../assets/js/settings.js"></script>
+    <script>
+      lucide.createIcons();
+    </script>
+</body>
+</html>

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <script src="../../../assets/js/auth-guard.js"></script>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="../../../assets/icons/Muriquiz - Mini Logo.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configurações Avançadas - MuriQuiz</title>
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('preferred-theme') || 'dark';
+            if (savedTheme !== 'dark') {
+                document.documentElement.classList.add(savedTheme + '-theme');
+            }
+        })();
+    </script>
+    <link rel="stylesheet" href="../../../assets/css/themes.css">
+    <link rel="stylesheet" href="../../../assets/css/quiz.css">
+    <link rel="stylesheet" href="../../../assets/css/advanced.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="page-loader" class="page-loader">
+        <div class="loader-spinner"></div>
+    </div>
+
+    <button class="sidebar-toggle" onclick="toggleSidebar()"><i data-lucide="menu"></i></button>
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2 id="userNameGreeting">Carregando...</h2>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <a href="../../../pages/quiz/index.html" class="nav-item">
+              <i data-lucide="graduation-cap"></i> Aprendizado
+            </a>
+            <a href="../../../pages/profile/index.html" class="nav-item">
+              <i data-lucide="user"></i> Meu Perfil
+            </a>
+            <a href="../../../pages/friends/index.html" class="nav-item">
+                <i data-lucide="users"></i> Amigos
+            </a>
+            <a href="../../../pages/schedule/index.html" class="nav-item">
+                <i data-lucide="calendar-range"></i> Cronograma
+            </a>
+        </nav>
+
+
+        <div class="sidebar-divider"></div>
+  
+        <div class="sidebar-settings">
+            <div class="settings-header" onclick="toggleSettings()">
+                <p class="settings-title">Configurações</p>
+                <i data-lucide="chevron-up"></i>
+            </div>
+            <div class="settings-content">
+                <div class="theme-options">
+                    <button class="theme-btn" data-theme="dark" onclick="setTheme('dark')" title="Tema Escuro"><i data-lucide="moon"></i></button>
+                    <button class="theme-btn" data-theme="light" onclick="setTheme('light')" title="Tema Claro"><i data-lucide="sun"></i></button>
+                    <button class="theme-btn" data-theme="contrast" onclick="setTheme('contrast')" title="Alto Contraste"><i data-lucide="accessibility"></i></button>
+                </div>
+                <a href="../../../pages/settings/advanced/index.html" class="delete-account-btn active" style="text-decoration: none; background-color: var(--purple); color: var(--bg-dark); border-color: var(--purple);">
+                    <i data-lucide="settings"></i> Avançado
+                </a>
+            </div>
+        </div>
+
+        <button class="logout-btn" onclick="logout()">
+            <i data-lucide="log-out"></i> Sair
+        </button>
+    </aside>
+
+    <main class="main-content">
+        <div class="content-wrapper">
+            <h1>Configurações Avançadas</h1>
+
+            <div class="advanced-container">
+                <!-- Seção Aplicativo Móvel -->
+                <section class="settings-section">
+                    <div class="section-header">
+                        <i data-lucide="smartphone"></i>
+                        <h2>Aplicativo Móvel</h2>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Download Muriquiz (Beta)</h3>
+                            <p>Experimente o Muriquiz diretamente no seu Android. Esta é uma versão de testes.</p>
+                            <span class="beta-tag">VERSÃO BETA</span>
+                        </div>
+                        <a href="https://drive.google.com/file/d/1V3Fuf7Aw0ee5mGEosgDNmNzHLEu-pZOb/view?usp=drive_link" class="btn-primary" target="_blank" rel="noopener noreferrer">
+                            <i data-lucide="external-link"></i> Baixar APK
+                        </a>
+                    </div>
+                </section>
+
+                <!-- Seção Notificações -->
+                <section class="settings-section">
+                    <div class="section-header">
+                        <i data-lucide="bell"></i>
+                        <h2>Notificações</h2>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Notificações do Sistema</h3>
+                            <p>Permita que o aplicativo envie notificações nativas para a sua área de trabalho/sistema.</p>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="notification-toggle" onchange="toggleSystemNotifications()">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </section>
+
+                <!-- Seção Conta -->
+                <section class="settings-section danger-zone">
+                    <div class="section-header">
+                        <i data-lucide="user"></i>
+                        <h2>Sua Conta</h2>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Deletar Conta</h3>
+                            <p>Exclua permanentemente todos os seus dados e quizzes salvos.</p>
+                        </div>
+                        <button class="btn-danger" onclick="deleteAccount()">
+                            <i data-lucide="trash-2"></i> Excluir Conta
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Seção Desenvolvedor (Admin Only) -->
+                <section id="dev-section" class="settings-section hidden">
+                    <div class="section-header">
+                        <i data-lucide="terminal"></i>
+                        <h2>Funções de Desenvolvedor</h2>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Atalhos de Desenvolvimento</h3>
+                            <p>Habilite ferramentas para acelerar o teste de novas funcionalidades.</p>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="dev-mode-toggle" onchange="toggleDevMode()">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+
+                    <div id="dev-tools" class="dev-tools-grid hidden" style="margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border); display: grid; gap: 15px;">
+                        <p style="font-size: 0.85rem; color: var(--purple); font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">Atalhos de Simulação (Quiz)</p>
+                        <div style="background: rgba(187, 154, 247, 0.05); padding: 20px; border-radius: 12px; border: 1px solid rgba(187, 154, 247, 0.2);">
+                            <h4 style="margin: 0 0 10px; color: var(--fg); font-size: 1rem;">Auto-Resolver Quiz</h4>
+                            <p style="margin: 0 0 20px; font-size: 0.85rem; color: var(--fg-dim);">Gera respostas automáticas e pula direto para a análise da IA.</p>
+                            
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px;">
+                                <button class="btn-primary" style="padding: 10px; font-size: 0.85rem; background: var(--green);" onclick="devAutoSolve('perfect')">
+                                    <i data-lucide="check-circle" style="width:14px;"></i> Tudo Certo
+                                </button>
+                                <button class="btn-primary" style="padding: 10px; font-size: 0.85rem; background: var(--yellow);" onclick="devAutoSolve('random')">
+                                    <i data-lucide="shuffle" style="width:14px;"></i> Aleatório
+                                </button>
+                                <button class="btn-primary" style="padding: 10px; font-size: 0.85rem; background: var(--red);" onclick="devAutoSolve('fail')">
+                                    <i data-lucide="x-circle" style="width:14px;"></i> Tudo Errado
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <p style="text-align: center; color: var(--fg-dim); font-size: 0.9rem;">
+                    Mais opções avançadas serão adicionadas em breve.
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal de Confirmação de Exclusão -->
+    <div id="delete-overlay" class="modal-overlay"></div>
+    <div id="modal-confirm" class="modal-box">
+        <div class="modal-icon warning">
+            <i data-lucide="alert-triangle"></i>
+        </div>
+        <h2>Tem certeza?</h2>
+        <p>Esta ação é irreversível. Todos os seus dados, quizzes e progresso serão excluídos permanentemente.</p>
+        <div class="modal-actions">
+            <button class="btn-secondary" onclick="closeDeleteModal()">Cancelar</button>
+            <button class="btn-danger-confirm" onclick="confirmDeleteAccount()">Sim, Excluir</button>
+        </div>
+    </div>
+
+    <!-- Modal de Sucesso (E-mail Enviado) -->
+    <div id="modal-success" class="modal-box">
+        <div class="modal-icon success">
+            <i data-lucide="mail"></i>
+        </div>
+        <h2>E-mail Enviado!</h2>
+        <p>Enviamos um link de confirmação para o seu e-mail cadastrado. Por favor, verifique sua caixa de entrada para concluir a exclusão.</p>
+        <div class="modal-actions">
+            <button class="btn-primary-confirm" onclick="closeSuccessModal()">Entendido</button>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="../../../assets/js/settings.js"></script>
+    <script src="../../../assets/js/advanced.js"></script>
+    <script>
+      lucide.createIcons();
+    </script>
+</body>
+</html>

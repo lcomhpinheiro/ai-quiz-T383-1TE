@@ -1,4 +1,15 @@
-const API_URL = "https://ai-quiz-students-backend.onrender.com"
+// Dynamic Base URL and API constants for static client environment
+const API_URL = "https://muriquiz.online";
+
+function getBaseUrl() {
+    const path = window.location.pathname;
+    const pagesIndex = path.indexOf('/pages/');
+    if (pagesIndex !== -1) {
+        return path.substring(0, pagesIndex + 1);
+    }
+    return '../../'; // fallback depth 2 prefix
+}
+
 const schoolYearSelect = document.getElementById('school-year');
 const modalityGroup = document.getElementById('modality-group');
 const modalitySelect = document.getElementById('modality');
@@ -6,6 +17,7 @@ const tableContainer = document.getElementById('table-container');
 const scheduleBody = document.getElementById('schedule-body');
 const scheduleForm = document.getElementById('schedule-form');
 const btnEdit = document.getElementById('btn-edit');
+const btnSkip = document.getElementById('btn-skip');
 const actionsContainer = document.querySelector('.actions');
 const saveBtn = actionsContainer.querySelector('button');
 let isEditing = false;
@@ -56,9 +68,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 async function loadInitialData() {
     try {
-        const response = await fetch(`${API_URL}/schedule/data`, {
-            credentials: 'include'
-        });
+        const response = await fetch(API_URL + '/schedule/data', { credentials: 'include' });
         const data = await response.json();
         if (data.schedule) {
             currentScheduleData = data.schedule;
@@ -69,20 +79,33 @@ async function loadInitialData() {
             generateTable(data.schedule.modality, data.schedule.schedule);
             setFormDisabled(true);
             btnEdit.classList.remove('hidden');
+            if (btnSkip) btnSkip.classList.add('hidden');
         } else {
             document.body.classList.add('registration-mode');
             isEditing = true;
         }
-        const userRes = await fetch(`${API_URL}/user/me`, {
-            credentials: 'include'
-        });
+        const userRes = await fetch(API_URL + '/user/me', { credentials: 'include' });
         if (userRes.ok) {
             const userData = await userRes.json();
-            document.getElementById('userNameGreeting').textContent = `Olá, ${userData.name.split(' ')[0]}`;
+            document.getElementById('userNameGreeting').textContent = `Olá, ${userData.user.name.split(' ')[0]}`;
+            
+            if (userData.user && userData.user.isAdmin) {
+                const nav = document.querySelector('.sidebar-nav');
+                if (nav && !nav.querySelector('a[href="/admin"]')) {
+                    const adminLink = document.createElement('a');
+                    adminLink.href = '/admin';
+                    adminLink.className = 'nav-item';
+                    adminLink.innerHTML = '<i data-lucide="shield-alert"></i> Admin';
+                    nav.appendChild(adminLink);
+                    if (typeof lucide !== 'undefined') lucide.createIcons();
+                }
+            }
         }
         validateTable();
     } catch (err) {
         console.error('Erro ao carregar dados:', err);
+    } finally {
+        hideLoader();
     }
 }
 function setFormDisabled(disabled) {
@@ -167,6 +190,22 @@ function generateTable(modality, savedData = null) {
     }
     validateTable();
 }
+async function skipSchedule() {
+    try {
+        const response = await fetch(API_URL + '/schedule/skip', {
+            method: 'POST',
+            credentials: 'include'
+        });
+        if (response.ok) {
+            window.location.href = getBaseUrl() + 'pages/quiz/index.html';
+        } else {
+            alert('Erro ao pular configuração');
+        }
+    } catch (err) {
+        console.error('Erro:', err);
+    }
+}
+
 scheduleForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const formData = new FormData(scheduleForm);
@@ -181,7 +220,12 @@ scheduleForm.addEventListener('submit', async (e) => {
         }
     }
     try {
-        const response = await fetch(`${API_URL}/schedule/save`, {
+        const btn = scheduleForm.querySelector('button[type="submit"]');
+        btn.disabled = true;
+        btn.innerHTML = '<i data-lucide="loader-2"></i> Salvando...';
+        lucide.createIcons();
+        
+        const response = await fetch(API_URL + '/schedule/save', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -192,27 +236,36 @@ scheduleForm.addEventListener('submit', async (e) => {
         const result = await response.json();
         if (response.ok) {
             alert('Horário salvo com sucesso!');
-            window.location.href = '../quiz/index.html';
+            window.location.href = getBaseUrl() + 'pages/quiz/index.html';
         } else {
             alert('Erro ao salvar horário: ' + (result.msg || 'Erro desconhecido'));
+            btn.disabled = false;
+            btn.innerHTML = '<i data-lucide="save"></i> Salvar Horário';
+            lucide.createIcons();
         }
     } catch (err) {
         console.error('Erro:', err);
         alert('Erro ao conectar com o servidor.');
+        const btn = scheduleForm.querySelector('button[type="submit"]');
+        btn.disabled = false;
+        btn.innerHTML = '<i data-lucide="save"></i> Salvar Horário';
+        lucide.createIcons();
     }
 });
 function toggleSidebar() {
     const sidebar = document.getElementById("sidebar");
+    const mainContent = document.querySelector(".main-content");
+    const toggleBtn = document.querySelector(".sidebar-toggle");
+    
     sidebar.classList.toggle("open");
+    if (mainContent) mainContent.classList.toggle("pushed");
+    if (toggleBtn) toggleBtn.classList.toggle("active");
 }
 async function logout() {
     try {
-        await fetch(`${API_URL}/auth/logout`, { 
-            method: 'POST',
-            credentials: 'include'
-        });
+        await fetch(API_URL + '/auth/logout', { method: 'POST', credentials: 'include' });
     } catch (error) {
         console.error('Erro ao fazer logout:', error);
     }
-    window.location.href = "../login/index.html";
+    window.location.href = getBaseUrl() + 'pages/login/index.html';
 }

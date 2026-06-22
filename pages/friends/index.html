@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <script src="../../assets/js/auth-guard.js"></script>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="../../assets/icons/Muriquiz - Mini Logo.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meus Amigos - MuriQuiz</title>
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('preferred-theme') || 'dark';
+            if (savedTheme !== 'dark') {
+                document.documentElement.classList.add(savedTheme + '-theme');
+            }
+        })();
+    </script>
+    <link rel="stylesheet" href="../../assets/css/friends.css">
+    <link rel="stylesheet" href="../../assets/css/themes.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="page-loader" class="page-loader">
+        <div class="loader-spinner"></div>
+    </div>
+
+    <button class="sidebar-toggle" onclick="toggleSidebar()"><i data-lucide="menu"></i></button>
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2 id="userNameGreeting">Carregando...</h2>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <a href="../../pages/quiz/index.html" class="nav-item">
+              <i data-lucide="graduation-cap"></i> Aprendizado
+            </a>
+            <a href="../../pages/profile/index.html" class="nav-item">
+              <i data-lucide="user"></i> Meu Perfil
+            </a>
+            <a href="../../pages/friends/index.html" class="nav-item active">
+                <i data-lucide="users"></i> Amigos
+                <span class="inbox-badge" id="sidebar-inbox-badge" style="display:none"></span>
+            </a>
+            <a href="../../pages/schedule/index.html" class="nav-item">
+                <i data-lucide="calendar-range"></i> Cronograma
+            </a>
+        </nav>
+
+        <div class="sidebar-divider"></div>
+  
+        <div class="sidebar-settings">
+            <div class="settings-header" onclick="toggleSettings()">
+                <p class="settings-title">Configurações</p>
+                <i data-lucide="chevron-up"></i>
+            </div>
+            <div class="settings-content">
+                <div class="theme-options">
+                    <button class="theme-btn" data-theme="dark" onclick="setTheme('dark')" title="Tema Escuro"><i data-lucide="moon"></i></button>
+                    <button class="theme-btn" data-theme="light" onclick="setTheme('light')" title="Tema Claro"><i data-lucide="sun"></i></button>
+                    <button class="theme-btn" data-theme="contrast" onclick="setTheme('contrast')" title="Alto Contraste"><i data-lucide="accessibility"></i></button>
+                </div>
+                <a href="../../pages/settings/advanced/index.html" class="delete-account-btn" style="text-decoration: none;">
+                    <i data-lucide="settings"></i> Avançado
+                </a>
+            </div>
+        </div>
+
+        <button class="logout-btn" id="logout-btn">
+            <i data-lucide="log-out"></i> Sair
+        </button>
+    </aside>
+
+    <main class="main-content" id="main-content">
+        <div class="content-wrapper">
+            <h1>Amigos</h1>
+
+            <!-- ── Buscar e Enviar Solicitação ── -->
+            <section class="search-section">
+                <div class="search-input-wrapper">
+                    <input type="text" id="friend-search-input" placeholder="Buscar por nome ou username...">
+                    <div id="search-results" class="search-results-dropdown hidden"></div>
+                </div>
+                <button class="search-btn" id="add-friend-btn"><i data-lucide="user-plus"></i> Enviar Solicitação</button>
+            </section>
+
+            <!-- ── Inbox de Solicitações ── -->
+            <section class="inbox-section" id="inbox-section" style="display:none">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <i data-lucide="inbox"></i> Solicitações Pendentes
+                        <span class="inbox-count-badge" id="inbox-count-badge">0</span>
+                    </h2>
+                </div>
+                <div class="inbox-list" id="inbox-list">
+                    <!-- Preenchido via JS -->
+                </div>
+            </section>
+
+            <!-- ── Lista de Amigos ── -->
+            <section>
+                <div class="section-header">
+                    <h2 class="section-title"><i data-lucide="users"></i> Meus Amigos</h2>
+                </div>
+                <div class="friends-grid" id="friends-list">
+                    <div class="empty-state">
+                        <p>Carregando sua lista de amigos...</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Template: Card de Amigo -->
+    <template id="friend-card-template">
+        <div class="friend-card">
+            <img src="" alt="" class="friend-avatar">
+            <div class="friend-info">
+                <h3 class="friend-name"></h3>
+                <p class="friend-username"></p>
+            </div>
+            <div class="friend-actions">
+                <a href="#" class="action-btn view-profile-btn">
+                    <i data-lucide="eye"></i> Ver Perfil
+                </a>
+                <button class="action-btn remove-friend-btn">
+                    <i data-lucide="trash-2"></i> Remover
+                </button>
+            </div>
+        </div>
+    </template>
+
+    <!-- Template: Card de Solicitação (Inbox) -->
+    <template id="request-card-template">
+        <div class="request-card">
+            <img src="" alt="" class="request-avatar">
+            <div class="request-info">
+                <span class="request-name"></span>
+                <span class="request-username"></span>
+                <span class="request-time"></span>
+            </div>
+            <div class="request-actions">
+                <button class="action-btn accept-btn"><i data-lucide="check"></i> Aceitar</button>
+                <button class="action-btn decline-btn"><i data-lucide="x"></i> Recusar</button>
+            </div>
+        </div>
+    </template>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="../../assets/js/friends.js"></script>
+    <script src="../../assets/js/settings.js"></script>
+    <script>
+      lucide.createIcons();
+    </script>
+</body>
+</html>

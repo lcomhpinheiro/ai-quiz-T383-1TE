@@ -1,4 +1,15 @@
-const API_URL = "https://ai-quiz-students-backend.onrender.com"
+// Dynamic Base URL and API constants for static client environment
+const API_URL = "https://muriquiz.online";
+
+function getBaseUrl() {
+    const path = window.location.pathname;
+    const pagesIndex = path.indexOf('/pages/');
+    if (pagesIndex !== -1) {
+        return path.substring(0, pagesIndex + 1);
+    }
+    return '../../'; // fallback depth 2 prefix
+}
+
 const form = document.querySelector('.auth-form')
 const notificationContainer = document.getElementById('notification-container')
 function capitalize(text) {
@@ -41,9 +52,24 @@ function showError(fieldId, message) {
 }
 function clearError(fieldId) {
     const input = document.getElementById(fieldId)
-    const group = input.parentElement
+    const group = input.parentElement.classList.contains('input-wrapper') ? input.parentElement.parentElement : input.parentElement
     group.classList.remove('error')
 }
+
+function togglePasswordVisibility(fieldId) {
+    const input = document.getElementById(fieldId);
+    const button = input.nextElementSibling;
+
+    if (input.type === 'password') {
+        input.type = 'text';
+        button.innerHTML = '<i data-lucide="eye"></i>';
+    } else {
+        input.type = 'password';
+        button.innerHTML = '<i data-lucide="eye-off"></i>';
+    }
+    lucide.createIcons();
+}
+
 const inputs = form.querySelectorAll('input')
 inputs.forEach(input => {
     input.addEventListener('input', () => {
@@ -64,7 +90,11 @@ form.addEventListener('submit', async (e) => {
         hasError = true
     }
     if (hasError) return
+    const btn = document.getElementById('submit-btn')
     try {
+        btn.disabled = true
+        btn.innerHTML = '<i data-lucide="loader-2"></i> Entrando...'
+        lucide.createIcons()
         const response = await fetch(`${API_URL}/auth/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -73,12 +103,18 @@ form.addEventListener('submit', async (e) => {
         })
         const data = await response.json()
         if (response.ok) {
-            window.location.href = '../quiz/index.html'
+            window.location.href = getBaseUrl() + 'pages/quiz/index.html'
         } else {
             showNotification(data.msg || 'Credenciais inválidas')
+            btn.disabled = false
+            btn.innerHTML = '<i data-lucide="log-in"></i> Entrar'
+            lucide.createIcons()
         }
     } catch (error) {
         console.error('Erro:', error)
         showNotification('Erro ao conectar com o servidor. Tente novamente mais tarde.')
+        btn.disabled = false
+        btn.innerHTML = '<i data-lucide="log-in"></i> Entrar'
+        lucide.createIcons()
     }
 })

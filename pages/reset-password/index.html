@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <link rel="icon" type="image/png" href="../../assets/icons/Muriquiz - Mini Logo.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Quiz - Registro</title>
+    <title>MuriQuiz - Redefinir Senha</title>
     <script>
         (function() {
             const savedTheme = localStorage.getItem('preferred-theme') || 'dark';
@@ -23,32 +23,14 @@
 
     <main class="login-container">
         <div class="auth-card">
-            <h2>Criar Conta</h2>
-            <p>Preencha os dados abaixo para se cadastrar</p>
+            <h2>Nova Senha</h2>
+            <p>Crie uma nova senha de acesso para sua conta</p>
             
             <form class="auth-form" novalidate>
                 <div class="input-group">
-                    <label for="name"><i data-lucide="user"></i> Primeiro Nome</label>
-                    <input type="text" id="name" placeholder="Seu nome">
-                    <span class="error-message">Nome é obrigatório</span>
-                </div>
-
-                <div class="input-group">
-                    <label for="username"><i data-lucide="user"></i> Usuário</label>
-                    <input type="text" id="username" placeholder="Nome de usuário">
-                    <span class="error-message">Usuário é obrigatório</span>
-                </div>
-
-                <div class="input-group">
-                    <label for="email"><i data-lucide="mail"></i> E-mail</label>
-                    <input type="email" id="email" placeholder="seu@email.com">
-                    <span class="error-message">E-mail inválido</span>
-                </div>
-                
-                <div class="input-group">
-                    <label for="password"><i data-lucide="lock"></i> Senha</label>
+                    <label for="password"><i data-lucide="lock"></i> Nova Senha</label>
                     <div class="input-wrapper">
-                        <input type="password" id="password" placeholder="Senha">
+                        <input type="password" id="password" placeholder="Mínimo 6 caracteres">
                         <button type="button" class="password-toggle" onclick="togglePasswordVisibility('password')">
                             <i data-lucide="eye-off"></i>
                         </button>
@@ -57,7 +39,7 @@
                 </div>
 
                 <div class="input-group">
-                    <label for="confirm-password"><i data-lucide="lock"></i> Confirmar Senha</label>
+                    <label for="confirm-password"><i data-lucide="lock"></i> Confirmar Nova Senha</label>
                     <div class="input-wrapper">
                         <input type="password" id="confirm-password" placeholder="Repita a senha">
                         <button type="button" class="password-toggle" onclick="togglePasswordVisibility('confirm-password')">
@@ -67,16 +49,12 @@
                     <span class="error-message">As senhas não coincidem</span>
                 </div>
                 
-                <button type="submit"><i data-lucide="user-plus"></i> Cadastrar</button>
+                <button type="submit"><i data-lucide="save"></i> Atualizar Senha</button>
             </form>
-            
-            <div class="card-footer">
-                <span>Já tem uma conta? <a href="../../pages/login/index.html"><i data-lucide="log-in"></i> Fazer login</a></span>
-            </div>
         </div>
     </main>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="../../assets/js/register.js"></script>
+    <script src="../../assets/js/reset.js"></script>
     <script>
       lucide.createIcons();
     </script>

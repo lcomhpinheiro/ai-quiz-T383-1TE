@@ -1,17 +1,40 @@
-:root {
-    --bg: #1a1b26;
-    --bg-dark: #16161e;
-    --fg: #c0caf5;
-    --fg-dim: #a9b1d6;
-    --blue: #7aa2f7;
-    --cyan: #7dcfff;
-    --green: #9ece6a;
-    --purple: #bb9af7;
-    --red: #f7768e;
-    --yellow: #e0af68;  
-    --border: #2f334d;
+
+
+.lucide {
+  width: 20px;
+  height: 20px;
+  stroke-width: 2px;
+  display: inline-block;
+  vertical-align: middle;
 }
 
+@keyframes lucide-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.lucide-loader-2 {
+  animation: lucide-spin 2s linear infinite;
+}
+
+.input-group label .lucide {
+  width: 18px;
+  height: 18px;
+  margin-right: 8px;
+  color: var(--purple);
+}
+
+button[type="submit"] .lucide {
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+}
+
+.card-footer .lucide {
+  width: 16px;
+  height: 16px;
+  margin-right: 4px;
+}
 *{
     box-sizing: border-box;
     margin: 0;
@@ -34,8 +57,6 @@ body {
 
 .auth-card {
     background-color: var(--bg);
-    width: 100%;
-    max-width: 340px;
     padding: 30px;
     border-radius: 14px;
     border: 1px solid var(--border);
@@ -56,6 +77,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 18px;
+    margin: 0 auto;
 }
 
 .input-group {
@@ -69,9 +91,52 @@ body {
     color: var(--fg-dim);
 }
 
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-wrapper input {
+    width: 100%;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 12px;
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    height: auto;
+    color: var(--fg-dim);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s;
+    z-index: 5;
+}
+
+.password-toggle:hover {
+    color: var(--fg);
+    background: none;
+    filter: none;
+}
+
+.password-toggle:active {
+    transform: none;
+}
+
+.password-toggle .lucide {
+    width: 18px;
+    height: 18px;
+}
+
 .input-group input {
     height: 42px;
     padding: 0 12px;
+    padding-right: 40px; /* Space for the toggle button */
     border-radius: 8px;
     border: 1px solid var(--border);
     background-color: var(--bg-dark);
