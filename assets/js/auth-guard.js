@@ -1,5 +1,5 @@
 (async function() {
-    const API_URL = "https://muriquiz.online";
+    const API_URL = "https://www.muriquiz.online";
     
     function getBaseUrl() {
         const path = window.location.pathname;
@@ -205,7 +205,7 @@ function showOfficialSiteNotice() {
                 O MuriQuiz agora está no ar com seu próprio domínio oficial! Acesse a plataforma oficial para desfrutar de novos recursos, maior velocidade e estabilidade.
             </p>
             <div class="official-notice-actions">
-                <a href="https://muriquiz.online" class="official-notice-btn-primary" id="official-notice-redirect">Ir para a Página Oficial</a>
+                <a href="https://www.muriquiz.online" class="official-notice-btn-primary" id="official-notice-redirect">Ir para a Página Oficial</a>
                 <button class="official-notice-btn-secondary" id="official-notice-close-btn">Fechar</button>
             </div>
         </div>

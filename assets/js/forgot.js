@@ -1,5 +1,5 @@
 // Dynamic Base URL and API constants for static client environment
-const API_URL = "https://muriquiz.online";
+const API_URL = "https://www.muriquiz.online";
 
 function getBaseUrl() {
     const path = window.location.pathname;

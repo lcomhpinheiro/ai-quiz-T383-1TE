@@ -1,5 +1,5 @@
 // Dynamic Base URL and API constants for static client environment
-const API_URL = "https://muriquiz.online";
+const API_URL = "https://www.muriquiz.online";
 
 function getBaseUrl() {
     const path = window.location.pathname;
@@ -124,7 +124,7 @@ function setupSocket() {
   if (socket && socket.connected) return;
   
   console.log("[Socket] Inicializando conexão...");
-  socket = io('https://muriquiz.online');
+  socket = io('https://www.muriquiz.online');
 
   // Registra handlers de prefetch de redação (sistemas assíncronos)
   registerEssayPrefetchHandlers(socket);
